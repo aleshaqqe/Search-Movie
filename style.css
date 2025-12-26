@@ -1,0 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import "bookmark.css";
+/* ===== Variables ===== */
+:root {
+  --bg-main: #0d0d0f;
+  --bg-secondary: #16161c;
+  --neon-red: rgba(229, 9, 20, 0.7);
+  --neon-red-light: rgba(229, 9, 20, 0.35);
+  --white: #fff;
+  --font-main: 'Roboto', sans-serif;
+  --font-bold: 'Archivo Black', sans-serif;
+}
+
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+}
+
+a, a:link, a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-main);
+  color: var(--white);
+}
+
+ul, li {
+  list-style: none;
+}
+
+/* ===== Container ===== */
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ===== Header ===== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: var(--bg-main);
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.header__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.header__list li a {
+  font-size: 20px;
+  padding: 10px 5px;
+  border-radius: 10px;
+  transition: all 0.4s;
+}
+
+.header__list li a:hover {
+  background: #e50914;
+}
+
+/* ===== Main app ===== */
+#app {
+  background-color: var(--bg-secondary);
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+/* ===== Homepage ===== */
+.homepage, .favourites__container {
+  min-height: 100vh;
+}
+
+.homepage-content {
+  padding-top: 30px;
+}
+
+.homepage__title {
+  font-size: 34px;
+  font-family: var(--font-main);
+}
+
+.homepage__subtitle {
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+/* ===== Grid layouts ===== */
+.results,
+.favourites__content,
+.popular_movies-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* ===== Movie cards ===== */
+.popular_movie-card,
+.bookmark-card,
+.results .movie-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.popular_movie-card:hover,
+.bookmark-card:hover,
+.results .movie-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 0 20px var(--neon-red-light), 0 0 60px rgba(229,9,20,0.15);
+}
+
+.populars__poster,
+.results .movie-card img,
+.bookmark-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  filter: brightness(0.75);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.popular_movie-card:hover .populars__poster,
+.results .movie-card:hover img,
+.bookmark-card:hover img {
+  filter: brightness(1);
+  transform: scale(1.05);
+}
+
+/* ===== Card overlay ===== */
+.popular_movie-card::after,
+.bookmark-card::after,
+.results .movie-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0) 75%);
+  pointer-events: none;
+}
+
+/* ===== Titles ===== */
+
+.populars__title{
+  margin-top:130px;
+}
+.populars__title,
+.results .movie-card h2,
+.bookmark-card h2 {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 0 10px var(--neon-red-light);
+}
+
+/* ===== Buttons ===== */
+.popular-back{
+  margin-top:35px;
+}
+.popular-back,
+.bookmarks__btn,
+.search__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--white);
+  background: rgba(229,9,20,0.15);
+  border: 1px solid rgba(229,9,20,0.5);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.popular-back:hover,
+.bookmarks__btn:hover,
+.search__btn:hover {
+  background: rgba(229,9,20,0.35);
+  box-shadow: 0 0 12px var(--neon-red), 0 0 40px rgba(229,9,20,0.35);
+  transform: translateY(-2px);
+}
+
+.popular-back::before { content: '←'; font-size: 16px; }
+.bookmarks__btn::before { content: '★'; font-size: 16px; margin-right: 6px; }
+
+/* ===== Terminal style ===== */
+.cmd { margin-top:30px; width: 400px; height: 400px; }
+
+.terminal_toolbar {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 5px 5px 0 0;
+  background: #212121;
+  justify-content: space-between;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin-right: 5px;
+  font-size: 8px;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: linear-gradient(#7d7871 0%, #595953 100%);
+  text-shadow: 0px 1px 0px rgba(255,255,255,0.2);
+}
+
+.btn-color { background: #ee411a; }
+.btn:hover { cursor: pointer; }
+
+.terminal_body {
+  background: rgba(0,0,0,0.6);
+  height: calc(100% - 30px);
+  padding-top: 2px;
+  margin-top: -1px;
+  font-size: 12px;
+  border-radius: 0 0 5px 5px;
+}
+
+.terminal_user { color: #1eff8e; }
+.terminal_location { color: #4878c0; }
+.terminal_bling { color: #dddddd; }
+
+.terminal_cursor {
+  display: block;
+  height: 14px;
+  width: 5px;
+  margin-left: 10px;
+  animation: curbl 1200ms linear infinite;
+}
+
+@keyframes curbl {
+  0%,49%,100% { background: #ffffff; }
+  60%,99% { background: transparent; }
+}
+
+/* ===== Buttons in cards ===== */
+.movie-card .bookmarks__btn,
+.bookmark-card .delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.movie-card:hover .bookmarks__btn,
+.bookmark-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn {
+  background: rgba(220, 20, 20, 0.9);
+  border: 1px solid rgba(255, 50, 50, 0.7);
+}
+
+.delete-btn:hover {
+  background: rgba(255, 30, 30, 1);
+  box-shadow: 0 0 12px rgba(255, 30, 30, 0.7);
+}

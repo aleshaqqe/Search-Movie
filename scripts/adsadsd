@@ -1,0 +1,174 @@
+const moviesList = document.querySelector('.movies__list');
+const input = document.querySelector('input');
+const btn = document.querySelector('.btn');
+const container = document.querySelector('.main-content');
+let totalPages = 0;
+let curQuery=''
+let currentPage = 1;
+let loadMoreVisible = true;
+
+import { API, favourites } from './api.js';
+
+
+
+function getTrailerIframe(key) {
+  if (!key) return null;
+
+  return `
+    <iframe
+      width="100%"
+      height="500"
+      src="https://www.youtube.com/embed/${key}"
+      title="Trailer"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  `;
+}
+
+
+function toggleLoadMore(show){
+  loadMoreVisible = show;
+  const btn = document.querySelector('.more-btn');
+  if(!btn) return;
+  if(show){
+    btn.classList.remove('disactive');
+
+  }else{
+    btn.classList.add('disactive');
+  }
+}
+function renderMovies(movies){
+  movies.forEach(movie => {
+
+    const li= document.createElement('li');
+    li.classList.add('movie-item');
+    li.innerHTML=`
+ <a class="card__link" href="#">
+    <h1>${movie.title}</h1>
+    <p>${movie.vote_average}</p>
+    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}"/>
+    <p>Дорослий: ${movie.adult == true ? 'Так': 'Ні'}</p>
+    <p>Дата релізу ${movie.release_date}</p>
+    <button class="btn btn__card">Зберегти</button>
+ </a>
+    `;
+    const btnFavourite = li.querySelector('.btn__card');
+    btnFavourite.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation()
+      if(!favourites.includes(movie.id)){
+        favourites.push(movie.id);
+      }
+      console.log(favourites);
+      localStorage.setItem('favorites', JSON.stringify(favourites));
+
+    })
+    const information = li.querySelector('.card__link');
+    information.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleLoadMore(false);
+      moviesList.classList.add('disactive');
+      document.querySelector('.trailer').classList.add('disactive');
+      const info = document.createElement('div');
+      info.classList.add('movie-info');
+      info.innerHTML = `
+ <h1 class="movie__title">${movie.title}</h1>
+        <div class="movie__description">
+          <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}"/>
+          <p class="movie__overview">${movie.overview}</p>
+        </div>
+        <div class="trailer__container">
+
+
+
+        </div>
+        <button class="movie__btn">Back</button>
+      `;
+      container.prepend(info);
+
+      const trailerContainer = info.querySelector('.trailer__container');
+      a.fetchTrailer(movie.id).then(key => {
+        if (!key || key === "Trailer not found") {
+          trailerContainer.innerHTML = 'Trailer not Found!'
+        } else {
+          trailerContainer.innerHTML = getTrailerIframe(key);
+        }
+      })
+      const btn3 = info.querySelector('.movie__btn');
+      btn3.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        info.remove();
+        moviesList.classList.remove('disactive');
+        document.querySelector('.trailer').classList.remove('disactive');
+        toggleLoadMore(currentPage < totalPages);
+
+      })
+    });
+
+
+    moviesList.appendChild(li);
+  });
+
+}
+const a = new API();
+
+async function searchMovies() {
+  moviesList.innerHTML = '';
+  curQuery = input.value
+  const result = await  a.fetchMovies(`${curQuery}`,currentPage)
+  renderMovies(result.results)
+  input.value = '';
+  totalPages = result.total_pages;
+  const btn = document.querySelector('.more-btn');
+  if(btn){
+    btn.remove();
+  }
+  if(currentPage<totalPages){
+    loadMore();
+
+  }
+}
+btn.addEventListener('click',  (e) => {
+  e.preventDefault();
+  currentPage=1;
+  searchMovies();
+
+});
+document.addEventListener('keydown', async (e) => {
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    currentPage=1;
+    searchMovies();
+  }})
+
+function loadMore () {
+  if (document.querySelector('.more-btn')) return;
+
+  const butt = document.createElement('button');
+  butt.textContent = 'Load More';
+  butt.classList.add('more-btn');
+
+  // Применяем текущий статус видимости
+  if (!loadMoreVisible) {
+    butt.classList.add('disactive');
+  }
+
+  container.appendChild(butt);
+
+  butt.addEventListener('click', async (e) => {
+    e.preventDefault();
+    currentPage++;
+    const data = await a.fetchMovies(curQuery, currentPage);
+    renderMovies(data.results);
+
+    totalPages = data.total_pages;
+
+    if (currentPage >= data.total_pages) {
+      butt.remove();
+    }
+  });
+
+}
