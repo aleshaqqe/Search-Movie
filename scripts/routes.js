@@ -4,13 +4,15 @@ import { bookmark, forma , homePage} from './DOM.js';
 import { PopularRender } from './popular.js';
 import {renderMovieDetails} from "./movieDetails.js";
 import {searchDetails} from './searchDetails.js'
+import {popularDetails} from "./popularDetails.js";
 
 
 export const routes = {
   "/":()=>{
     return homePage;
   },
-  "/search": ()=>forma,
+
+  '/search': ()=>forma,
   '/search/:id': async ()=>{
     const path = window.location.pathname;
     const movieId = path.split('/').pop();
@@ -24,6 +26,11 @@ export const routes = {
   },
   '/populars': async () =>{
     return await PopularRender();
+  },
+  '/populars/:id': async ()=>{
+    const path = window.location.pathname;
+    const movieId = path.split('/').pop();
+    return await popularDetails(movieId);
   },
   '/bookmarks/:id':async () =>{
     const path = window.location.pathname;

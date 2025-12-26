@@ -14,6 +14,9 @@
       }else if(path.startsWith('/search/')&&path.split('/').length===3){
         content = routes['/search/:id'];
         console.log('Found dynamic route:', content);
+      }else if(path.startsWith('/populars/')&&path.split('/').length===3){
+        content = routes['/populars/:id'];
+        console.log('Found dynamic route:', content);
       }
     }
 

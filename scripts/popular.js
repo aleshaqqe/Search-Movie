@@ -1,4 +1,6 @@
 import {API} from './api.js';
+import {render} from './render.js';
+import {routes} from "./routes.js";
 export async function PopularRender(){
   const root = document.createElement('div');
   root.classList.add('container', 'populars-content');
@@ -25,6 +27,14 @@ export async function PopularRender(){
   
     `
     list.appendChild(card);
+
+    card.addEventListener('click',(event)=>{
+      event.stopPropagation();
+      history.pushState(null,null,'/populars/'+item.id);
+      const app =document.querySelector('#app');
+      render(app, routes);
+
+    })
 
   });
 

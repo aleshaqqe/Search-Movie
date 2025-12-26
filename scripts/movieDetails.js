@@ -8,6 +8,7 @@ export async function renderMovieDetails(id){
   container.classList.add('movieDetails-content','container');
   const api = new API();
   const data = await api.fetchMovieFromId(id);
+  const trailer = await api.fetchTrailer(id);
   const poster = data.poster_path
     ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
     : 'https://i.pinimg.com/1200x/4d/2d/e9/4d2de94f3266435bf50a1840f4953b14.jpg';
@@ -46,6 +47,17 @@ export async function renderMovieDetails(id){
           </div>
           
           ${data.tagline ? `<p class="movie-detail__tagline">"${data.tagline}"</p>` : ''}
+           <div class="movie__trailer">
+            <div class="trailer__ratio">
+    <iframe
+      src="https://www.youtube.com/embed/${trailer}"
+      title="Trailer"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
         </div>
       </div>
     </div>

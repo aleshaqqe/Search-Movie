@@ -1,6 +1,6 @@
 import {API} from './api.js';
 
-export async function searchDetails(id){
+export async function popularDetails(id){
   console.log('renderMovieDetails called with ID:', id); // DEBUG
 
 
@@ -21,7 +21,7 @@ export async function searchDetails(id){
     <div class="movie-detail__backdrop" style="background-image: url('${backdrop}')"></div>
     
     <div class="movie-detail__content">
-      <a href="/search" class="movie-detail__back" data-link>← Назад до пошуку</a>
+      <a href="/populars" class="movie-detail__back" data-link>← Назад до популярних кіно</a>
       
       <div class="movie-detail__wrapper">
         <div class="movie-detail__poster">
@@ -47,12 +47,11 @@ export async function searchDetails(id){
           </div>
           
           ${data.tagline ? `<p class="movie-detail__tagline">"${data.tagline}"</p>` : ''}
-          <div class="movie__trailer">
+           <div class="movie__trailer">
             <div class="trailer__ratio">
     <iframe
       src="https://www.youtube.com/embed/${trailer}"
       title="Trailer"
-      frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
