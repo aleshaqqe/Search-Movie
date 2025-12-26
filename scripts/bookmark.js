@@ -1,4 +1,6 @@
 import {API} from './api.js';
+import {render} from './render.js';
+import {routes} from './routes.js';
 const storage = 'favourites';
 
 export function getBookmark(){
@@ -36,10 +38,19 @@ export async function renderBookmark(favourites){
 
     const item = document.createElement('div');
     item.classList.add('favourites__item');
-
+    item.dataset.movie_id=data.id;
+    item.addEventListener('click', (event) =>{
+      if(!event.target.classList.contains('delete-btn')){
+        history.pushState(null, null, `/bookmarks/${favId}`);
+        const app = document.querySelector('#app');
+        render(app,routes);
+      }
+    })
     item.innerHTML = `
+    
       <img src="${poster}" class="favourites__image" alt="${data.title}"/>
       <h3>${data.title}</h3>
+
     `;
     const deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');

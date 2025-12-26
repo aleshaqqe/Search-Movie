@@ -1,4 +1,7 @@
 import {saveBookmark} from "./bookmark.js";
+import { renderMovieDetails } from "./movieDetails.js";
+import {render} from './render.js';
+import {routes} from './routes.js'; // ⭐ ДОДАЙ ЦЕЙ ІМПОРТ!
 
 
 export function renderCards(movies, container){
@@ -13,6 +16,13 @@ export function renderCards(movies, container){
       <h3 class="card__title">${movie.title}</h3>
       <img style="max-width:300px; height:auto;" src="${poster}" alt="Poster not found">
     `;
+    card.addEventListener('click',(e)=>{
+      if(!e.target.classList.contains('bookmarks__btn')){
+        history.pushState(null, null, `/search/${movie.id}`);
+        const app = document.querySelector('#app');
+        render(app, routes);
+      }
+    })
 
     //Button for save in bookmarks
     const btn = document.createElement('button');
